@@ -40,7 +40,7 @@ function preload () {
     game.load.atlas('enemy', 'images/enemy-tanks.png', 'images/tanks.json');
     game.load.image('logo', 'images/logo.png');
     
-    //game.load.tilemap('desert', 'images/desert_bad.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('desert', 'images/desert_bad.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles', 'images/desert.png');
     
     // bullets
@@ -201,7 +201,7 @@ function create () {
     map.fixedToCamera = true;
     
     var layer = map.createLayer('Ground');*/
-    /*
+    
     //  The 'mario' key here is the Loader key given in game.load.tilemap
     map = game.add.tilemap('desert');
 
@@ -214,7 +214,7 @@ function create () {
     
     map.setCollisionByExclusion([]);
     layer = map.createLayer('Ground');
-*/
+
     //  This resizes the game world to match the layer dimensions
     //layer.resizeWorld();
 
@@ -357,7 +357,7 @@ function update () {
     land.tilePosition.x = -game.camera.x;
 land.tilePosition.y = -game.camera.y;
 
-    if (condition) {
+    if (condition || 1) {
     // where should it be???
     game.physics.arcade.overlap(enemyBullets.group, player.tank, bulletHitPlayer, null, this);
     
@@ -386,7 +386,7 @@ land.tilePosition.y = -game.camera.y;
         {
             enemiesAlive++;
 
-            if (condition) {
+            if (condition || 1) {
             game.physics.arcade.collide(player.tank, enemies[i].tank);
             
             for(var j = i + 1; j < enemies.length; j++){
