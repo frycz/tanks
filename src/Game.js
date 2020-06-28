@@ -86,6 +86,8 @@ function preload () {
     game.load.image('health_item', 'images/heart_small.png');
     game.load.image('speed_item', 'images/speed_item.png');
     
+    game.load.image('mine', 'images/mine.png');
+    
     game.load.image('winner', 'images/winner.png');
     
     game.load.spritesheet('kaboom', 'images/explosion.png', 64, 64, 23);
@@ -115,6 +117,8 @@ var explosions;
 var amoItems;
 var healthItems;
 var speedItems;
+
+var mines;
 
 var targetSprite;
 
@@ -147,6 +151,8 @@ var playerSaveData = null;
 var amoItemsCount = 10;
 var speedItemsCount = 10;
 var healthItemsCount = 10;
+
+var minesCount = 30;
 
 var amoHelpItemsCount = 0;
 var speedHelpItemsCount = 0;
@@ -189,11 +195,13 @@ function create () {
     
 
     //  Resize our game world to be a 2000 x 2000 square
-    game.world.setBounds(0, 0, 5000, 5000);
+    game.world.setBounds(0, 0, 4000, 4000);
 
     //  Our tiled scrolling background
     land = game.add.tileSprite(0, 0, gameWidth, gameHeight, 'earth');
     land.fixedToCamera = true;
+
+    game.physics.arcade.TILE_BIAS = 0;
     
     /*
     var map = game.add.tilemap('desert');
@@ -203,24 +211,24 @@ function create () {
     var layer = map.createLayer('Ground');*/
     
     //  The 'mario' key here is the Loader key given in game.load.tilemap
-    map = game.add.tilemap('desert');
+    ////map = game.add.tilemap('desert');
 
     //  The first parameter is the tileset name, as specified in the Tiled map editor (and in the tilemap json file)
     //  The second parameter maps this name to the Phaser.Cache key 'tiles'
-    map.addTilesetImage('Desert', 'tiles');
+    ////map.addTilesetImage('Desert', 'tiles');
 
     //  Creates a layer from the World1 layer in the map data.
     //  A Layer is effectively like a Phaser.Sprite, so is added to the display list.
     
-    map.setCollisionByExclusion([]);
-    layer = map.createLayer('Ground');
+    ////map.setCollisionByExclusion([]);
+    ////layer = map.createLayer('Ground');
 
     //  This resizes the game world to match the layer dimensions
     //layer.resizeWorld();
 
     cursors = game.input.keyboard.createCursorKeys();
 
-    spaceKey = this.game.input.keyboard.addKey(70);
+    spaceKey = this.game.input.keyboard.addKey(32);
     
 
     explosions = new Explosions(game,20,'kaboom',bombExplosionSound);
@@ -294,6 +302,8 @@ function create () {
     amoItems = new Items(game.world.randomX, game.world.randomY, game, amoItemsCount, 'amunation_item', true);
     speedItems = new Items(game.world.randomX, game.world.randomY, game, speedItemsCount, 'speed_item', true);
     healthItems = new Items(game.world.randomX, game.world.randomY, game, healthItemsCount, 'health_item', true);
+    
+    mines = new Mine(game.world.randomX, game.world.randomY, game, minesCount, 'mine', explosions, true);
 
 
     game.camera.follow(player.tank);
@@ -342,7 +352,7 @@ function update () {
 
     var current = Date.now()
     var diff = current - timer
-    diff > 16 && console.log(diff)
+    //diff > 16 && console.log(diff)
     timer = current
     
     if(playerProtectionTime > 0){
@@ -350,14 +360,15 @@ function update () {
     }
 
     counter++
-    var condition = counter%3
+    var condition1 = counter%10
+    var condition2 = counter%11
 
-    player.update(enemies);
-
+    
     land.tilePosition.x = -game.camera.x;
-land.tilePosition.y = -game.camera.y;
-
-    if (condition || 1) {
+    land.tilePosition.y = -game.camera.y;
+    
+    player.update(enemies);
+    if (condition1) {
     // where should it be???
     game.physics.arcade.overlap(enemyBullets.group, player.tank, bulletHitPlayer, null, this);
     
@@ -368,12 +379,14 @@ land.tilePosition.y = -game.camera.y;
     game.physics.arcade.overlap(healthItems.group, player.tank, playerCollectsHealth, null, this);
     game.physics.arcade.overlap(speedItems.group, player.tank, playerCollectsSpeed, null, this);
     
+    game.physics.arcade.overlap(mines.group, player.tank, playerHitMine, null, this);
+    
    /*game.physics.arcade.collide(amoItems.group, player.tank);
    game.physics.arcade.collide(healthItems.group, player.tank);
    game.physics.arcade.collide(speedItems.group, player.tank);*/
-    game.physics.arcade.overlap(player.weapon.getBullets().group, layer, bulletHitWall, null, this);
+    ////game.physics.arcade.overlap(player.weapon.getBullets().group, layer, bulletHitWall, null, this);
    
-   game.physics.arcade.collide(player.tank, layer);
+   //game.physics.arcade.collide(player.tank, layer);
     }
 
     enemiesAlive = 0;
@@ -386,7 +399,7 @@ land.tilePosition.y = -game.camera.y;
         {
             enemiesAlive++;
 
-            if (condition || 1) {
+            if (condition2) {
             game.physics.arcade.collide(player.tank, enemies[i].tank);
             
             for(var j = i + 1; j < enemies.length; j++){
@@ -398,14 +411,16 @@ land.tilePosition.y = -game.camera.y;
             game.physics.arcade.overlap(enemies[i].getBullets().group, player.tank, bulletHitPlayer, null, this);
             
             game.physics.arcade.overlap(enemies[i].getBullets().group, layer, bulletHitWall, null, this);
+            
+            game.physics.arcade.overlap(mines.group, enemies[i].tank, enemyHitMine, null, this);
             //bulletHitWall
             
-            game.physics.arcade.collide(enemies[i].tank, layer, function(tank,layer){
-                tank.rotation = tank.rotation + 90;
-            });
+            //game.physics.arcade.collide(enemies[i].tank, layer, function(tank,layer){
+            //    tank.rotation = tank.rotation + 90;
+            //});
         }
+        enemies[i].update();
             
-            enemies[i].update();
         }
     }
     
@@ -500,6 +515,30 @@ function playerCollectsSpeed(playerTank,track){
     speedCollectedSound.play();
 }
 
+function playerHitMine (playerTank, mine) {
+    var explosionX = mine.x;
+    var explosionY = mine.y;
+    
+    var player = playerTank.player;
+    
+    mines.explosion.play(explosionX,explosionY);
+    mine.kill();
+    
+    // let's set default damage as 10
+    var minePower = 30;
+    if(mine.power){
+        minePower = mine.power;
+    }
+    
+    player.beHitWithPower(minePower,playerProtectionTime);
+    
+    if(!player.isAlive()){
+        //var logo = game.add.sprite(200, 300, 'logo');
+        //logo.fixedToCamera = true;
+        repeatLevel();
+    } 
+}
+
 function bulletHitPlayer (playerTank, bullet) {
 
     var explosionX = playerTank.x;
@@ -522,6 +561,30 @@ function bulletHitPlayer (playerTank, bullet) {
         //logo.fixedToCamera = true;
         repeatLevel();
     } 
+}
+
+function enemyHitMine (enemyTank, mine) {
+    var explosionX = mine.x;
+    var explosionY = mine.y;
+
+    
+    mines.explosion.play(explosionX,explosionY);
+    mine.kill();
+    
+    // let's set default damage as 10
+    var minePower = 30;
+    if(mine.power){
+        minePower = mine.power;
+    }
+    
+    var enemy = enemyTank.enemy;
+if (enemy) {
+    enemy.damage(minePower);
+    
+    if(!enemy.alive){
+        points = points + enemy.getTankValue();
+    }
+}
 }
 
 function bulletHitEnemy (enemyTank, bullet) {

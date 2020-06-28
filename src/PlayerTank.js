@@ -8,6 +8,7 @@ var PlayerTank = function(x,y,game,cursors,bullets/*,enemies*/,shotSound, explos
     // cursors - game cursors ref
     
     this.life = 100;
+    this.currentSpeed = 0;
     
     this.maxSpeed = 340;
     this.fireRate = 3000;
@@ -132,6 +133,9 @@ PlayerTank.prototype.update = function(enemies){
     {
         //  The speed we'll travel at
         this.currentSpeed = this.maxSpeed;
+        /*if (this.currentSpeed < this.maxSpeed) {
+            this.currentSpeed += 4;
+        }*/
     }
     else
     {
@@ -215,6 +219,8 @@ PlayerTank.prototype.kill = function(){
 }
 
 PlayerTank.prototype.beHitWithPower = function(powerValue,playerProtectionTime){
+
+    this.currentSpeed = this.currentSpeed / 2
 
     if(playerProtectionTime == undefined || playerProtectionTime <= 0){
         this.updateLife(-1*powerValue);

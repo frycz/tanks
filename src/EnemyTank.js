@@ -61,7 +61,7 @@ var EnemyTank = function (index, game, player, _x, _y, moveSound, explosionSound
 EnemyTank.prototype.damage = function(damageValue) {
 
     this.health -= damageValue;
-    this.actualMaxSpeed -= damageValue;
+    this.actualMaxSpeed = this.actualMaxSpeed / 2;
     if(this.actualMaxSpeed < 0){
         this.actualMaxSpeed = 0;
     }
@@ -132,7 +132,7 @@ EnemyTank.prototype.update = function() {
 
     this.velocity = this.actualMaxSpeed;
     if(this.actualMaxSpeed < this.maxSpeed){
-       this.actualMaxSpeed = this.actualMaxSpeed + 0.5;
+       this.actualMaxSpeed = this.actualMaxSpeed + 4;
     }
     
     if(!this.player.player.isAlive()){
