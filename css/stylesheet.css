@@ -31,7 +31,7 @@ body {
     }
     
     .loading {
-        font-size: 16px;
+        font-size: 14px;
         color: black;
         position: relative;
         right: 80px;
@@ -44,7 +44,7 @@ body {
     }
     
     .fire {
-        font-size: 40px;
+        font-size: 32px;
         color: #363636;
         
         -webkit-transition: all 0.5s ease;
@@ -55,7 +55,7 @@ body {
     }
     
     .killed {
-        font-size:40px;
+        font-size:32px;
     }
     /*
     .active {
@@ -99,21 +99,32 @@ body {
     background-color: rgba(85, 132, 210, 0.709804);
 }
 #game-info {
-    background:url(../images/start.png) no-repeat center center;
+
+    background-color: #b6ac7e;
 }
-#welcome-screen {
+#welcome-screen, #end-screen {
     background:url(../images/main.png) no-repeat center center;
     background-color:#4F6273;
     -moz-box-shadow: inset 0 0 200px #0A0A0A;
     -webkit-box-shadow: inset 0 0 200px #0A0A0A;
     box-shadow: inset 0 0 200px #0A0A0A;
 }
-#welcome-screen div {
+
+#end-screen {
+    background:url(../images/victory.jpg) no-repeat center center;
+    background-size: cover;
+}
+
+#end-screen {
+    display: none;
+}
+
+#welcome-screen div, #end-screen div {
         background-color: rgba(255, 255, 255, 0.59);
         padding:30px;
         margin-top:50px;
 }
-#play-now {
+#play-now, #play-again {
     margin-top: 50px;
     background-color: #B6AC7E;
     display: inline-block;

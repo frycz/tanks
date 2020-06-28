@@ -43,49 +43,6 @@
 
 </head>
 <body style="overflow:hidden; font-family: 'Play', sans-serif,Arial; background-color: white">
-<script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '482986975216175',
-      xfbml      : true,
-      version    : 'v2.4'
-    });
-
-    // ADD ADDITIONAL FACEBOOK CODE HERE
-    // Place following code after FB.init call.
-
-function onLogin(response) {
-  if (response.status == 'connected') {
-    FB.api('/me?fields=first_name', function(data) {
-      var welcomeBlock = document.getElementById('fb-welcome');
-      welcomeBlock.innerHTML = 'Hello, ' + data.first_name + '!';
-    });
-  }
-}
-
-FB.getLoginStatus(function(response) {
-  // Check login status on load, and if the user is
-  // already logged in, go directly to the welcome message.
-  if (response.status == 'connected') {
-    onLogin(response);
-  } else {
-    // Otherwise, show Login dialog first.
-    FB.login(function(response) {
-      onLogin(response);
-    }, {scope: 'user_friends, email'});
-  }
-});
-  };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-</script>
-
 
 <div id='welcome-screen' style="position:absolute;top:0;bottom:0;right:0;left:0;margin:auto;overflow:hidden;z-index:1000;text-align:center;">
     <div >
@@ -96,11 +53,21 @@ FB.getLoginStatus(function(response) {
     </div>
     
 </div>
+
+<div id='end-screen' style="position:absolute;top:0;bottom:0;right:0;left:0;margin:auto;overflow:hidden;z-index:100;text-align:center;">
+    <div >
+        <h1 style='font-size:6em;'>Congratulations!</h1>
+        <h3 style='font-size:3em;'>You survived</h3>
+        
+        <h3 id='play-again'>Back to main screen</h3>
+    </div>
+    
+</div>
         
         
 <div class='hit-mask' style="position:absolute;top:0;bottom:0;right:0;left:0;margin:auto;overflow:hidden;background-color:#C40000;z-index:1000;display:none;"></div>
 
-        <div id="game-info" style='position:absolute;margin:auto;top:0;left:0;right:0;bottom:0;width:600px;height:400px;display:none;'>
+        <div id="game-info" style='position:absolute;margin:auto;top:0;left:0;right:0;bottom:0;display:none;'>
             <!--<img src="images/approved.jpg" class='game-info-image'>-->
         </div>
 
@@ -142,7 +109,7 @@ FB.getLoginStatus(function(response) {
             </div>
                 <div class="col-md-2">
             </div>
-            <div class="col-md-1">
+            <div class="col-md-1" style='display: none'>
                 <button id="fc" class='btn btn-primary pull-right'>Full Screen</button>
                 <button id="fcb" class='btn btn-primary pull-right'>Back</button>
             </div>

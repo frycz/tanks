@@ -6,9 +6,22 @@ var gameWidth = null;
 var gameHeight = null;
 
 
-function loadNextLevel(){
-    $('#game-info').css({background:'url(images/approved.jpg) no-repeat center center'});
+function loadNextLevel(player){
+    $('#game-info').css({background:'url(images/approved.jpg) no-repeat center center', backgroundColor: '#b6ac7e'});
+    
+    player.life = 100;
+
     level++;
+
+    if (level > LevelConfig.config.length) {
+        $('#panel-top').hide();
+        $('#panel-bottom').hide();
+        $('#hit-mask').hide();
+        $('#game-info').hide();
+        $('#end-screen').show();
+        return;
+    }
+
     actualDisplayTime = 0;
     
     amoHelpItemsCount = 0;
@@ -19,12 +32,14 @@ function loadNextLevel(){
     game.state.start('main');
 }
 
-function repeatLevel(){
+function repeatLevel(player){
     //$('body').css({backgroundColor:'#C40000'});
-    $('#game-info').css({background:'url(images/badluck.jpg) no-repeat center center'});
+    $('#game-info').css({background:'url(images/badluck.png) no-repeat center center', backgroundColor: '#a94747'});
     
+    player.life = 100;
+
     actualDisplayTime = 0;
-    points = points - (50*level);
+    points = points - (20*level);
     amoHelpItemsCount = amoHelpItemsCount + 2;
     speedHelpItemsCount = speedHelpItemsCount + 2;
     healthHelpItemsCount = healthHelpItemsCount + 2;
@@ -367,7 +382,6 @@ function update () {
     land.tilePosition.x = -game.camera.x;
     land.tilePosition.y = -game.camera.y;
     
-    player.update(enemies);
     if (condition1) {
     // where should it be???
     game.physics.arcade.overlap(enemyBullets.group, player.tank, bulletHitPlayer, null, this);
@@ -388,6 +402,8 @@ function update () {
    
    //game.physics.arcade.collide(player.tank, layer);
     }
+
+    player.update(enemies);
 
     enemiesAlive = 0;
     
@@ -428,7 +444,7 @@ function update () {
         if(informationDisplayTime > actualDisplayTime){
             actualDisplayTime++;
         } else {
-            loadNextLevel();
+            loadNextLevel(player);
         }
     }
 
@@ -535,7 +551,7 @@ function playerHitMine (playerTank, mine) {
     if(!player.isAlive()){
         //var logo = game.add.sprite(200, 300, 'logo');
         //logo.fixedToCamera = true;
-        repeatLevel();
+        repeatLevel(player);
     } 
 }
 
@@ -559,7 +575,7 @@ function bulletHitPlayer (playerTank, bullet) {
     if(!player.isAlive()){
         //var logo = game.add.sprite(200, 300, 'logo');
         //logo.fixedToCamera = true;
-        repeatLevel();
+        repeatLevel(player);
     } 
 }
 
@@ -714,6 +730,10 @@ $('#play-now').click(function(){
     $('#hit-mask').show();
     $('#game-info').show();
     start();
+})
+
+$('#play-again').click(function(){
+    window.location.reload()
 })
 
     

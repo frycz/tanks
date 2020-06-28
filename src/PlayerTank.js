@@ -16,7 +16,7 @@ var PlayerTank = function(x,y,game,cursors,bullets/*,enemies*/,shotSound, explos
     this.bulletSpeed = 1000;
     this.nextFire = 0;
     
-    this.actualWeaponLevel = 0;//0;
+    this.actualWeaponLevel = 0;
     
     this.fireAllowed = false;
     
