@@ -1,6 +1,6 @@
 body {
     margin: 0px 0px 1px 0px; /* the extra 1px allows the iOS inner/outer check to work */
-    background: #898989;
+    background-color: #b6ac7e;
 }
 
 #orientation {
@@ -99,8 +99,8 @@ body {
     background-color: rgba(85, 132, 210, 0.709804);
 }
 #game-info {
-
-    background-color: #b6ac7e;
+    background:url(../images/loading.gif) no-repeat center center;
+    background-color: #e7dcca;
 }
 #welcome-screen, #end-screen {
     background:url(../images/main.png) no-repeat center center;

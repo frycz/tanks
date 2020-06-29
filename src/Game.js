@@ -7,7 +7,7 @@ var gameHeight = null;
 
 
 function loadNextLevel(player){
-    $('#game-info').css({background:'url(images/approved.jpg) no-repeat center center', backgroundColor: '#b6ac7e'});
+    $('#game-info').css({background:'url(images/approval.jpg) no-repeat center center', backgroundSize: 'cover', backgroundColor: '#b6ac7e'});
     
     player.life = 100;
 
@@ -34,7 +34,7 @@ function loadNextLevel(player){
 
 function repeatLevel(player){
     //$('body').css({backgroundColor:'#C40000'});
-    $('#game-info').css({background:'url(images/badluck.png) no-repeat center center', backgroundColor: '#a94747'});
+    $('#game-info').css({background:'url(images/lost.jpg) no-repeat center center', backgroundSize: 'cover', backgroundColor: '#a94747'});
     
     player.life = 100;
 
@@ -109,9 +109,11 @@ function preload () {
     
     //game.load.atlas('generic', 'images/skins/generic-joystick.png', 'images/skins/generic-joystick.json');
     
-    game.load.image('winner', 'images/badluck.jpg');
-    game.load.image('winner', 'images/start.png');
-    game.load.image('winner', 'images/approved.jpg');
+    //game.load.image('winner', 'images/badluck.jpg');
+    //game.load.image('winner', 'images/start.png');
+    game.load.image('winner', 'images/approval.jpg');
+    game.load.image('lost', 'images/lost.jpg');
+    game.load.image('victory', 'images/victory.jpg');
     
 }
 
