@@ -40,9 +40,6 @@ function repeatLevel(player){
 
     actualDisplayTime = 0;
     points = points - (20*level);
-    amoHelpItemsCount = amoHelpItemsCount + 2;
-    speedHelpItemsCount = speedHelpItemsCount + 2;
-    healthHelpItemsCount = healthHelpItemsCount + 2;
     game.state.start('main');
 }
 

@@ -3,6 +3,10 @@ body {
     background-color: #b6ac7e;
 }
 
+.bold-font {
+    font-size: 18px;
+}
+
 #orientation {
     margin: 0 auto;
     position: absolute;
@@ -44,7 +48,8 @@ body {
     }
     
     .fire {
-        font-size: 32px;
+        font-size: 24px;
+        line-height: 46px;
         color: #363636;
         
         -webkit-transition: all 0.5s ease;
