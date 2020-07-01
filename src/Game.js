@@ -414,8 +414,8 @@ function update () {
         {
             enemiesAlive++;
 
-            if (condition2) {
             game.physics.arcade.collide(player.tank, enemies[i].tank);
+            if (condition2) {
             
             for(var j = i + 1; j < enemies.length; j++){
                 game.physics.arcade.collide(enemies[i].tank, enemies[j].tank);
